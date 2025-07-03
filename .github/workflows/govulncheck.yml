@@ -14,7 +14,7 @@ on:
 
 jobs:
   govulncheck:
-    name: govulncheck
+    name: govulncheck (CGO_ENABLED=${{ matrix.CGO_ENABLED }})
     runs-on: ubuntu-latest
     strategy:
       matrix:

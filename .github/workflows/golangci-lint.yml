@@ -12,7 +12,7 @@ on:
 
 jobs:
   golangci-lint:
-    name: lint
+    name: lint (CGO_ENABLED=${{ matrix.CGO_ENABLED }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
