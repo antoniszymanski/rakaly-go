@@ -1,0 +1,14 @@
+version: "2"
+linters:
+  enable:
+    - gocritic
+    - gosec
+  settings:
+    gosec:
+      excludes:
+        - G103
+        - G107
+        - G304
+    staticcheck:
+      dot-import-whitelist:
+        - github.com/antoniszymanski/rakaly-go/internal
