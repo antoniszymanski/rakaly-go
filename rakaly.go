@@ -30,18 +30,18 @@ type MeltedOutput struct {
 	melt MeltedBuffer
 }
 
-func (m MeltedOutput) WriteData(data []byte) ([]byte, error) {
+func (m MeltedOutput) WriteData(buf []byte) ([]byte, error) {
 	if Rakaly_melt_is_verbatim(m.melt) {
-		return resize(data, 0), ErrAlreadyPlaintext
+		return buf[:0], ErrAlreadyPlaintext
 	}
 
 	length := Rakaly_melt_data_length(m.melt)
-	data = resize(data, int(length)) //#nosec G115
-	if Rakaly_melt_write_data(m.melt, unsafe.SliceData(data), length) != length {
-		return resize(data, 0), ErrCopyFailed
+	buf = resize(buf, int(length)) //#nosec G115
+	if Rakaly_melt_write_data(m.melt, unsafe.SliceData(buf), length) != length {
+		return buf[:0], ErrCopyFailed
 	}
 
-	return data, nil
+	return buf, nil
 }
 
 func (m MeltedOutput) HasUnknownTokens() bool {
