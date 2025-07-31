@@ -1,4 +1,4 @@
-name: golangci-lint
+name: Run golangci-lint
 
 on:
   pull_request:
@@ -12,17 +12,21 @@ on:
 
 jobs:
   golangci-lint:
-    name: lint (CGO_ENABLED=${{ matrix.CGO_ENABLED }})
+    name: CGO_ENABLED=${{ matrix.CGO_ENABLED }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         CGO_ENABLED: ["0", "1"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-      - name: golangci-lint
+
+      - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v8
         env:
           CGO_ENABLED: ${{ matrix.CGO_ENABLED }}
