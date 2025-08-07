@@ -3,11 +3,11 @@ name: Run tests
 on:
   pull_request:
     branches: ["*"]
-    paths: ["**/*.go", "go.*"]
+    paths: ["**/*.go", "go.*", "internal/cgo/resources/*"]
   push:
     branches: ["*"]
     tags-ignore: ["v*"]
-    paths: ["**/*.go", "go.*"]
+    paths: ["**/*.go", "go.*", "internal/cgo/resources/*"]
   workflow_dispatch:
 
 jobs:
