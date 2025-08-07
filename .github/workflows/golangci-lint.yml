@@ -15,6 +15,7 @@ jobs:
     name: CGO_ENABLED=${{ matrix.CGO_ENABLED }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         CGO_ENABLED: ["0", "1"]
     steps:
