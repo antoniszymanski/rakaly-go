@@ -9,6 +9,51 @@ package cgo
 
 #include <stdbool.h>
 #include "resources/rakaly.h"
+
+#cgo noescape rakaly_free_melt
+#cgo nocallback rakaly_free_melt
+#cgo noescape rakaly_melt_data_length
+#cgo nocallback rakaly_melt_data_length
+#cgo noescape rakaly_melt_is_verbatim
+#cgo nocallback rakaly_melt_is_verbatim
+#cgo noescape rakaly_melt_binary_unknown_tokens
+#cgo nocallback rakaly_melt_binary_unknown_tokens
+#cgo noescape rakaly_melt_write_data
+#cgo nocallback rakaly_melt_write_data
+#cgo noescape rakaly_file_error
+#cgo nocallback rakaly_file_error
+#cgo noescape rakaly_error_length
+#cgo nocallback rakaly_error_length
+#cgo noescape rakaly_error_write_data
+#cgo nocallback rakaly_error_write_data
+#cgo noescape rakaly_free_error
+#cgo nocallback rakaly_free_error
+#cgo noescape rakaly_free_file
+#cgo nocallback rakaly_free_file
+#cgo noescape rakaly_file_value
+#cgo nocallback rakaly_file_value
+#cgo noescape rakaly_file_meta
+#cgo nocallback rakaly_file_meta
+#cgo noescape rakaly_file_meta_melt
+#cgo nocallback rakaly_file_meta_melt
+#cgo noescape rakaly_file_melt
+#cgo nocallback rakaly_file_melt
+#cgo noescape rakaly_file_is_binary
+#cgo nocallback rakaly_file_is_binary
+#cgo noescape rakaly_melt_error
+#cgo nocallback rakaly_melt_error
+#cgo noescape rakaly_melt_value
+#cgo nocallback rakaly_melt_value
+#cgo noescape rakaly_eu4_file
+#cgo nocallback rakaly_eu4_file
+#cgo noescape rakaly_ck3_file
+#cgo nocallback rakaly_ck3_file
+#cgo noescape rakaly_imperator_file
+#cgo nocallback rakaly_imperator_file
+#cgo noescape rakaly_hoi4_file
+#cgo nocallback rakaly_hoi4_file
+#cgo noescape rakaly_vic3_file
+#cgo nocallback rakaly_vic3_file
 */
 import "C"
 import "unsafe"
