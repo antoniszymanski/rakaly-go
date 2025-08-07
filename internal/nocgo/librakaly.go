@@ -4,6 +4,7 @@
 package nocgo
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -46,32 +47,36 @@ var (
 )
 
 func init() {
-	executablePath, err := os.Executable()
-	if err != nil {
-		panic(err)
+	var lib uintptr
+	var err error
+	for _, libDir := range filepath.SplitList(os.Getenv("LD_LIBRARY_PATH")) {
+		libDir, err = filepath.EvalSymlinks(libDir)
+		if err != nil {
+			continue
+		}
+		libDir, err = filepath.Abs(libDir)
+		if err != nil {
+			continue
+		}
+		lib, err = loadLibrakaly(libDir)
+		if err == nil {
+			break
+		}
 	}
-	executablePath, err = filepath.EvalSymlinks(executablePath)
-	if err != nil {
-		panic(err)
-	}
-	libDir := filepath.Dir(executablePath)
-
-	var libName string
-	switch runtime.GOOS {
-	case "darwin":
-		libName = "librakaly.dylib"
-	case "linux":
-		libName = "librakaly.so"
-	case "windows":
-		libName = "rakaly.dll"
-	default:
-		panic("GOOS=" + runtime.GOOS + " is not supported")
-	}
-	libPath := libDir + string(filepath.Separator) + libName
-
-	lib, err := openLibrary(libPath)
-	if err != nil {
-		panic("failed to load library (" + libName + "): " + err.Error())
+	if lib == 0 {
+		executablePath, err := os.Executable()
+		if err != nil {
+			panic(err)
+		}
+		executablePath, err = filepath.EvalSymlinks(executablePath)
+		if err != nil {
+			panic(err)
+		}
+		libDir := filepath.Dir(executablePath)
+		lib, err = loadLibrakaly(libDir)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	purego.RegisterLibFunc(&Rakaly_free_melt, lib, "rakaly_free_melt")
@@ -96,4 +101,26 @@ func init() {
 	purego.RegisterLibFunc(&Rakaly_imperator_file, lib, "rakaly_imperator_file")
 	purego.RegisterLibFunc(&Rakaly_hoi4_file, lib, "rakaly_hoi4_file")
 	purego.RegisterLibFunc(&Rakaly_vic3_file, lib, "rakaly_vic3_file")
+}
+
+var libName = func() string {
+	switch runtime.GOOS {
+	case "darwin":
+		return "librakaly.dylib"
+	case "linux":
+		return "librakaly.so"
+	case "windows":
+		return "rakaly.dll"
+	default:
+		panic("GOOS=" + runtime.GOOS + " is not supported")
+	}
+}()
+
+func loadLibrakaly(libDir string) (uintptr, error) {
+	libPath := libDir + string(filepath.Separator) + libName
+	lib, err := openLibrary(libPath)
+	if err != nil {
+		return 0, errors.New("failed to load library (" + libName + "): " + err.Error())
+	}
+	return lib, nil
 }
