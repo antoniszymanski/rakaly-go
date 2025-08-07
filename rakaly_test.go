@@ -23,14 +23,14 @@ type TestCase struct {
 
 type ParseFunc func(data []byte) (rakaly.GameFile, error)
 
-func (t *TestCase) Name() string {
-	name := runtime.FuncForPC(reflect.ValueOf(t.ParseFunc).Pointer()).Name()
+func (tc *TestCase) Name() string {
+	name := runtime.FuncForPC(reflect.ValueOf(tc.ParseFunc).Pointer()).Name()
 	name = strings.TrimPrefix(name, "github.com/antoniszymanski/rakaly-go.Parse")
 	return name
 }
 
-func TestMain(t *testing.T) {
-	for _, testCase := range []TestCase{
+func Test(t *testing.T) {
+	for _, tc := range []TestCase{
 		{
 			URL:       "https://eu4saves-test-cases.s3.us-west-002.backblazeb2.com/kandy2.bin.eu4",
 			ParseFunc: rakaly.ParseEu4,
@@ -48,16 +48,16 @@ func TestMain(t *testing.T) {
 			ParseFunc: rakaly.ParseHoi4,
 		},
 	} {
-		t.Run(testCase.Name(), func(t *testing.T) {
-			RunTest(t, testCase)
+		t.Run(tc.Name(), func(t *testing.T) {
+			tc.Run(t)
 		})
 	}
 }
 
-func RunTest(t *testing.T, testCase TestCase) {
+func (tc *TestCase) Run(t *testing.T) {
 	t.Parallel()
 
-	resp, err := http.Get(testCase.URL)
+	resp, err := http.Get(tc.URL)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -68,7 +68,7 @@ func RunTest(t *testing.T, testCase TestCase) {
 		t.Fatal(err)
 	}
 
-	if testCase.Name() == "Hoi4" {
+	if tc.Name() == "Hoi4" {
 		r := bytes.NewReader(data)
 		zr, err := zip.NewReader(r, r.Size())
 		if err != nil {
@@ -87,7 +87,7 @@ func RunTest(t *testing.T, testCase TestCase) {
 		}
 	}
 
-	g, err := testCase.ParseFunc(data)
+	g, err := tc.ParseFunc(data)
 	if err != nil {
 		t.Fatal(err)
 	}
