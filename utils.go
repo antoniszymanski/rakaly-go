@@ -15,5 +15,8 @@ func resize(b []byte, length int) []byte {
 	if length <= cap(b) {
 		return b[:length]
 	}
-	return append(b[:cap(b)], make([]byte, length-cap(b))...)
+	return makeNoZero(length)
 }
+
+//go:linkname makeNoZero internal/bytealg.MakeNoZero
+func makeNoZero(length int) []byte

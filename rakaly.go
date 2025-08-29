@@ -17,7 +17,7 @@ func unwrapError(err PdsError) error {
 	}
 
 	length := Rakaly_error_length(err)
-	data := make([]byte, length)
+	data := makeNoZero(length)
 	Rakaly_error_write_data(err, unsafe.SliceData(data), length)
 	Rakaly_free_error(err)
 	return Error(bytesToString(data))
