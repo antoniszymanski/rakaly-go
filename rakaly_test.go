@@ -16,19 +16,6 @@ import (
 	"github.com/antoniszymanski/rakaly-go"
 )
 
-type TestCase struct {
-	URL       string
-	ParseFunc ParseFunc
-}
-
-type ParseFunc func(data []byte) (rakaly.GameFile, error)
-
-func (tc *TestCase) Name() string {
-	name := runtime.FuncForPC(reflect.ValueOf(tc.ParseFunc).Pointer()).Name()
-	name = strings.TrimPrefix(name, "github.com/antoniszymanski/rakaly-go.Parse")
-	return name
-}
-
 func Test(t *testing.T) {
 	for _, tc := range []TestCase{
 		{
@@ -48,10 +35,19 @@ func Test(t *testing.T) {
 			ParseFunc: rakaly.ParseHoi4,
 		},
 	} {
-		t.Run(tc.Name(), func(t *testing.T) {
-			tc.Run(t)
-		})
+		t.Run(tc.Name(), tc.Run)
 	}
+}
+
+type TestCase struct {
+	URL       string
+	ParseFunc func(data []byte) (rakaly.GameFile, error)
+}
+
+func (tc *TestCase) Name() string {
+	name := runtime.FuncForPC(reflect.ValueOf(tc.ParseFunc).Pointer()).Name()
+	name = strings.TrimPrefix(name, "github.com/antoniszymanski/rakaly-go.Parse")
+	return name
 }
 
 func (tc *TestCase) Run(t *testing.T) {
