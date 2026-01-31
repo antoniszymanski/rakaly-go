@@ -15,7 +15,6 @@ func unwrapError(err PdsError) error {
 	if err == nil {
 		return nil
 	}
-
 	length := Rakaly_error_length(err)
 	data := makeNoZero(length)
 	Rakaly_error_write_data(err, unsafe.SliceData(data), length)
@@ -31,13 +30,11 @@ func (m MeltedOutput) WriteData(buf []byte) ([]byte, error) {
 	if Rakaly_melt_is_verbatim(m.melt) {
 		return buf[:0], ErrAlreadyPlaintext
 	}
-
 	length := Rakaly_melt_data_length(m.melt)
 	buf = resize(buf, int(length)) //#nosec G115
 	if Rakaly_melt_write_data(m.melt, unsafe.SliceData(buf), length) != length {
 		return buf[:0], ErrCopyFailed
 	}
-
 	return buf, nil
 }
 
@@ -62,13 +59,11 @@ func (g GameFile) MeltMeta() (MeltedOutput, error) {
 	if meta == nil {
 		return MeltedOutput{}, ErrMetadataNotFound
 	}
-
 	meltResult := Rakaly_file_meta_melt(meta)
 	err := unwrapError(Rakaly_melt_error(meltResult))
 	if err != nil {
 		return MeltedOutput{}, err
 	}
-
 	melt := Rakaly_melt_value(meltResult)
 	return MeltedOutput{melt}, nil
 }
@@ -79,7 +74,6 @@ func (g GameFile) Melt() (MeltedOutput, error) {
 	if err != nil {
 		return MeltedOutput{}, err
 	}
-
 	melt := Rakaly_melt_value(meltResult)
 	return MeltedOutput{melt}, nil
 }
@@ -118,7 +112,6 @@ func parse(fn func(*byte, uint) PdsFileResult, data []byte) (GameFile, error) {
 	if err != nil {
 		return GameFile{}, err
 	}
-
 	file := Rakaly_file_value(fileResult)
 	return GameFile{file}, nil
 }
