@@ -89,62 +89,31 @@ func (g GameFile) Free() {
 }
 
 func ParseEu4(data []byte) (GameFile, error) {
-	fileResult := Rakaly_eu4_file(unsafe.SliceData(data), uint(len(data)))
-	err := unwrapError(Rakaly_file_error(fileResult))
-	if err != nil {
-		return GameFile{}, err
-	}
-
-	file := Rakaly_file_value(fileResult)
-	return GameFile{file}, nil
+	return parse(Rakaly_eu4_file, data)
 }
 
 func ParseCk3(data []byte) (GameFile, error) {
-	fileResult := Rakaly_ck3_file(unsafe.SliceData(data), uint(len(data)))
-	err := unwrapError(Rakaly_file_error(fileResult))
-	if err != nil {
-		return GameFile{}, err
-	}
-
-	file := Rakaly_file_value(fileResult)
-	return GameFile{file}, nil
+	return parse(Rakaly_ck3_file, data)
 }
 
 func ParseImperator(data []byte) (GameFile, error) {
-	fileResult := Rakaly_imperator_file(unsafe.SliceData(data), uint(len(data)))
-	err := unwrapError(Rakaly_file_error(fileResult))
-	if err != nil {
-		return GameFile{}, err
-	}
-
-	file := Rakaly_file_value(fileResult)
-	return GameFile{file}, nil
+	return parse(Rakaly_imperator_file, data)
 }
 
 func ParseHoi4(data []byte) (GameFile, error) {
-	fileResult := Rakaly_hoi4_file(unsafe.SliceData(data), uint(len(data)))
-	err := unwrapError(Rakaly_file_error(fileResult))
-	if err != nil {
-		return GameFile{}, err
-	}
-
-	file := Rakaly_file_value(fileResult)
-	return GameFile{file}, nil
+	return parse(Rakaly_hoi4_file, data)
 }
 
 func ParseVic3(data []byte) (GameFile, error) {
-	fileResult := Rakaly_vic3_file(unsafe.SliceData(data), uint(len(data)))
-	err := unwrapError(Rakaly_file_error(fileResult))
-	if err != nil {
-		return GameFile{}, err
-	}
-
-	file := Rakaly_file_value(fileResult)
-	return GameFile{file}, nil
+	return parse(Rakaly_vic3_file, data)
 }
 
 func ParseEu5(data []byte) (GameFile, error) {
-	fileResult := Rakaly_eu5_file(unsafe.SliceData(data), uint(len(data)))
+	return parse(Rakaly_eu5_file, data)
+}
+
+func parse(fn func(*byte, uint) PdsFileResult, data []byte) (GameFile, error) {
+	fileResult := fn(unsafe.SliceData(data), uint(len(data)))
 	err := unwrapError(Rakaly_file_error(fileResult))
 	if err != nil {
 		return GameFile{}, err
