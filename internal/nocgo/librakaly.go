@@ -44,6 +44,7 @@ var (
 	Rakaly_imperator_file             func(*byte, uint) PdsFileResult
 	Rakaly_hoi4_file                  func(*byte, uint) PdsFileResult
 	Rakaly_vic3_file                  func(*byte, uint) PdsFileResult
+	Rakaly_eu5_file                   func(*byte, uint) PdsFileResult
 )
 
 func init() {
@@ -101,6 +102,7 @@ func init() {
 	purego.RegisterLibFunc(&Rakaly_imperator_file, lib, "rakaly_imperator_file")
 	purego.RegisterLibFunc(&Rakaly_hoi4_file, lib, "rakaly_hoi4_file")
 	purego.RegisterLibFunc(&Rakaly_vic3_file, lib, "rakaly_vic3_file")
+	purego.RegisterLibFunc(&Rakaly_eu5_file, lib, "rakaly_eu5_file")
 }
 
 var libName = func() string {

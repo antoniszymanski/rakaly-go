@@ -142,3 +142,14 @@ func ParseVic3(data []byte) (GameFile, error) {
 	file := Rakaly_file_value(fileResult)
 	return GameFile{file}, nil
 }
+
+func ParseEu5(data []byte) (GameFile, error) {
+	fileResult := Rakaly_eu5_file(unsafe.SliceData(data), uint(len(data)))
+	err := unwrapError(Rakaly_file_error(fileResult))
+	if err != nil {
+		return GameFile{}, err
+	}
+
+	file := Rakaly_file_value(fileResult)
+	return GameFile{file}, nil
+}

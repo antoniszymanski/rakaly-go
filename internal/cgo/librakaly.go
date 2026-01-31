@@ -54,6 +54,8 @@ package cgo
 #cgo nocallback rakaly_hoi4_file
 #cgo noescape rakaly_vic3_file
 #cgo nocallback rakaly_vic3_file
+#cgo noescape rakaly_eu5_file
+#cgo nocallback rakaly_eu5_file
 */
 import "C"
 import "unsafe"
@@ -132,4 +134,7 @@ func Rakaly_hoi4_file(p0 *byte, p1 uint) PdsFileResult {
 }
 func Rakaly_vic3_file(p0 *byte, p1 uint) PdsFileResult {
 	return C.rakaly_vic3_file((*C.char)(unsafe.Pointer(p0)), C.size_t(p1))
+}
+func Rakaly_eu5_file(p0 *byte, p1 uint) PdsFileResult {
+	return C.rakaly_eu5_file((*C.char)(unsafe.Pointer(p0)), C.size_t(p1))
 }

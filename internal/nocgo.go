@@ -82,3 +82,6 @@ func Rakaly_hoi4_file(p0 *byte, p1 uint) PdsFileResult {
 func Rakaly_vic3_file(p0 *byte, p1 uint) PdsFileResult {
 	return nocgo.Rakaly_vic3_file(p0, p1)
 }
+func Rakaly_eu5_file(p0 *byte, p1 uint) PdsFileResult {
+	return nocgo.Rakaly_eu5_file(p0, p1)
+}
