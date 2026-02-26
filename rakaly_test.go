@@ -17,6 +17,7 @@ import (
 )
 
 func Test(t *testing.T) {
+	t.Parallel()
 	for _, tc := range []TestCase{
 		{
 			URL:       "https://eu4saves-test-cases.s3.us-west-002.backblazeb2.com/kandy2.bin.eu4",
