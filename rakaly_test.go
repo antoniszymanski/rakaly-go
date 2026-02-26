@@ -4,8 +4,6 @@
 package rakaly_test
 
 import (
-	"archive/zip"
-	"bytes"
 	"io"
 	"net/http"
 	"reflect"
@@ -20,19 +18,19 @@ func Test(t *testing.T) {
 	t.Parallel()
 	for _, tc := range []TestCase{
 		{
-			URL:       "https://eu4saves-test-cases.s3.us-west-002.backblazeb2.com/kandy2.bin.eu4",
+			URL:       "https://cdn-dev.pdx.tools/eu4-saves/kandy2.bin.eu4",
 			ParseFunc: rakaly.ParseEu4,
 		},
 		{
-			URL:       "https://ck3saves-test-cases.s3.us-west-002.backblazeb2.com/af_Munso_867_Ironman.ck3",
+			URL:       "https://cdn-dev.pdx.tools/ck3-saves/af_Munso_867_Ironman.ck3",
 			ParseFunc: rakaly.ParseCk3,
 		},
 		{
-			URL:       "https://imperator-test-cases.s3.us-west-002.backblazeb2.com/observer1.5.rome",
+			URL:       "https://cdn-dev.pdx.tools/imperator-saves/observer1.5.rome",
 			ParseFunc: rakaly.ParseImperator,
 		},
 		{
-			URL:       "https://hoi4saves-test-cases.s3.us-west-002.backblazeb2.com/1.10-ironman.zip",
+			URL:       "https://cdn-dev.pdx.tools/hoi4-saves/1.10-ironman.hoi4",
 			ParseFunc: rakaly.ParseHoi4,
 		},
 	} {
@@ -63,25 +61,6 @@ func (tc *TestCase) Run(t *testing.T) {
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	if tc.Name() == "Hoi4" {
-		r := bytes.NewReader(data)
-		zr, err := zip.NewReader(r, r.Size())
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		f, err := zr.Open("1.10-ironman.hoi4")
-		if err != nil {
-			t.Fatal(err)
-		}
-		defer f.Close() //nolint:errcheck
-
-		data, err = io.ReadAll(f)
-		if err != nil {
-			t.Fatal(err)
-		}
 	}
 
 	g, err := tc.ParseFunc(data)
