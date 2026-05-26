@@ -3,8 +3,8 @@
 const root = path self .
 let release = http get https://api.github.com/repos/rakaly/librakaly/releases/latest
 
-def download [nameSuffix: string files: list<string>] {
-  let asset = $release.assets | where name ends-with $nameSuffix | first
+def download [name_suffix: string files: list<string>] {
+  let asset = $release.assets | where name ends-with $name_suffix | first
   let url = $asset.browser_download_url
   let dir_name = $asset.name | path parse --extension "tar.gz" | get stem
   let archive_file = mktemp --dry
